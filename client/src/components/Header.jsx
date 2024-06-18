@@ -6,7 +6,7 @@ function Header() {
     <header>
 
         <Link to='/' className = 'logo'>
-            Diary
+            BookLog
         </Link>
 
         <nav>
