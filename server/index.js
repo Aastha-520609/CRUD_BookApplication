@@ -55,7 +55,7 @@ const storage = multer.diskStorage({
     }
   });
   
-  const upload = multer({ storage: storage})
+  const upload = multer({ storage: storage});
 
 //uploading pictures
 app.post("/api/books", upload.single("thumbnail"), async (req,res) => {
@@ -72,7 +72,6 @@ app.post("/api/books", upload.single("thumbnail"), async (req,res) => {
             thumbnail: req.file.filename,
         })
 
-        //  await Book.create(newBook);
         await newBook.save();
         res.json("Data Submitted");
     } catch (error) {

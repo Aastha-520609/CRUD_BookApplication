@@ -43,7 +43,7 @@ function CreateBook() {
     };
 
     const handleCategoryChange = (e) => {
-        setCategories(e.target.value.split(',').map((category) => category.trim()));
+        setCategories(e.target.value.split(",").map((category) => category.trim()));
     };
 
     const onImageChange = (e) => {
@@ -64,7 +64,14 @@ function CreateBook() {
                 <form className='bookdetails' onSubmit={createBook}>
                     <div className='col-1'>
                         <label>Upload Thumbnail</label>
-                        <img src={image} alt='Preview Image' />
+                        {image ? (
+                            <img src={image} alt="preview image" />
+                        ) : (
+                            <img
+                                src={`https://crud-bookapplication-2.onrender.com/uploads/${thumbnail}`}
+                                alt='preview image'
+                            />
+                        )}
 
                         <input
                             onChange={onImageChange}
@@ -95,7 +102,7 @@ function CreateBook() {
                         <div>
                             <label>Stars</label>
                             <input
-                                type='text'
+                                type='number'
                                 value={stars}
                                 onChange={(e) => setStars(e.target.value)}
                             />
