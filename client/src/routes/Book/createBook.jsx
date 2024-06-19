@@ -24,7 +24,7 @@ function CreateBook() {
         formData.append('thumbnail', thumbnail);
 
         try {
-            const response = await fetch('http://localhost:8000/api/books', {
+            const response = await fetch('https://crud-bookapplication-2.onrender.com/api/books', {
                 method: 'POST',
                 body: formData,
             });
@@ -32,6 +32,7 @@ function CreateBook() {
             if (response.ok) {
                 setTitle('');
                 setSlug('');
+                setImage(NoImageSelected);
                 setSubmitted('Data Submitted Successfully!');
             } else {
                 console.log('Failed to submit data');

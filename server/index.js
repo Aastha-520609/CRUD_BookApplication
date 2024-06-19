@@ -17,25 +17,18 @@ connectDB();
 app.use(cors());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
-app.use("/uploads", express.static("uploads")); 
+app.use("/uploads", express.static(static(path.join(__dirname, 'uploads')))); 
 
 //creating a route
 app.get("/api/books", async (req,res) => {
     try {
-        //fetching category from url
         const category = req.query.category;
-        //console.log(category);
-
-        const filter = {};
-        if(category)
-        {
-            filter.category = category;
-        }
-
+        const filter = category ? { category } : {};
         const data = await Book.find(filter);
         res.json(data);
     } catch (error) {
-        res.status(500).json({error: "An error occured while fetching books."});
+        console.error("Error fetching books:", error);
+        res.status(500).json({ error: "An error occurred while fetching books." });
     }
 });
 
@@ -46,6 +39,7 @@ app.get("/api/books/:slug", async (req,res) => {
         const data = await Book.findOne({ slug: slugParam});
         res.json(data);
     } catch (error) {
+        console.error("Error fetching book details:", error);
         res.status(500).json({error: "An error occured while fetching books."});
     }
 });
@@ -56,12 +50,12 @@ const storage = multer.diskStorage({
       cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       cb(null, uniqueSuffix + "-" + file.originalname);
     }
-  })
+  });
   
-  const upload = multer({ storage: storage })
+  const upload = multer({ storage: storage})
 
 //uploading pictures
 app.post("/api/books", upload.single("thumbnail"), async (req,res) => {
@@ -75,12 +69,14 @@ app.post("/api/books", upload.single("thumbnail"), async (req,res) => {
             stars: req.body.stars,
             description: req.body.description,
             category: req.body.category,
-            thumbnail: req.body.thumbnail,
+            thumbnail: req.file.filename,
         })
 
-        await Book.create(newBook);
+        //  await Book.create(newBook);
+        await newBook.save();
         res.json("Data Submitted");
     } catch (error) {
+        console.error("Error submitting book data:", error);
         res.status(500).json({error: "An error occured while fetching books."});
     }
 });
@@ -107,6 +103,7 @@ app.put("/api/books", upload.single("thumbnail"), async (req,res) => {
         await Book.findByIdAndUpdate(bookId, updateBook)
         res.json("Data Submitted");
     } catch (error) {
+        console.error("Error updating book data:", error);
         res.status(500).json({error: "An error occured while fetching books."});
     }
 });
@@ -147,7 +144,6 @@ app.delete("/api/books/:id", async (req, res) => {
     } catch (error) {
         res.json(error);
     }
-
 });
 
 

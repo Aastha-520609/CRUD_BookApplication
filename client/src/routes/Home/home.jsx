@@ -107,7 +107,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRecentReviews = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/books');
+        const response = await fetch('https://crud-bookapplication-2.onrender.com/api/books');
         if (!response.ok) {
           throw new Error('Failed to fetch recent reviews');
         }
@@ -185,7 +185,7 @@ const Home = () => {
               {recentReviews.map((review, index) => (
                 <div key={index} className="book-card">
                   <div className="image-container">
-                    <img src={`http://localhost:8000/uploads/${review.thumbnail}`} alt={review.title} className="book-cover" />
+                    <img src={`https://crud-bookapplication-2.onrender.com/uploads/${review.thumbnail}`} alt={review.title} className="book-cover" />
                   </div>
                   <div className="book-details">
                     <h3>{review.title}</h3>
